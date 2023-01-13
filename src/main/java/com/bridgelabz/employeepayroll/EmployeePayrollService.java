@@ -1,6 +1,6 @@
 package com.bridgelabz.employeepayroll;
 /*Problem Statement
- * UC 5 - Ability to retrieve all employees who have joined in a particular data range from the payroll service database
+ * UC 6 - Ability to find sum, average, min, max and number of male and female employees
  */
 import java.sql.Connection;
 import java.sql.PreparedStatement;
