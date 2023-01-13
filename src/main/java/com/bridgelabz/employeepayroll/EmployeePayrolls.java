@@ -1,7 +1,6 @@
 package com.bridgelabz.employeepayroll;
 /*Problem Statement
- * UC 4 - Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
-using JDBC PreparedStatement 
+ * UC 5 - Ability to retrieve all employees who have joined in a particular data range from the payroll service database
  */
 import java.time.LocalDate;
 import java.util.Scanner;
