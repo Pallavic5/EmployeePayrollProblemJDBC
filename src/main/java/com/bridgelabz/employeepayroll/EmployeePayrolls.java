@@ -1,7 +1,9 @@
 package com.bridgelabz.employeepayroll;
-/*
- * UC 3 - Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
+/*Problem Statement
+ * UC 4 - Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
+using JDBC PreparedStatement 
  */
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class EmployeePayrolls {
@@ -13,7 +15,7 @@ public class EmployeePayrolls {
 		final int EXIT = 10;
 		int choice = 0;
 		while (choice != EXIT) {
-			System.out.println("Enter Your Choice\n1. Get employee data\n2. update basic pay\n3. EXIT\n");
+			System.out.println("Enter Your Choice\n1. Get employee data\n2. update basic pay\n3. display employee roll\n4. empdata range  \n5. calculate \n6. EXIT\n");
 			choice = scanner.nextInt();
 			switch (choice) {
 			case 1:
@@ -31,6 +33,22 @@ public class EmployeePayrolls {
 				break;
 
 			case 3:
+				employeePayRollService.display();
+				break;
+
+			case 4:
+				System.out.println("enter initial date");
+				LocalDate iDate = LocalDate.parse(scanner.next());
+				System.out.println("enter final date");
+				LocalDate eDate = LocalDate.parse(scanner.next());
+				employeePayRollService.getEmployee(iDate, eDate);
+				break;
+
+			case 5:
+				employeePayRollService.calculate();
+				break;
+
+			case 6:
 				System.out.println("good bye");
 				break;
 
@@ -38,4 +56,5 @@ public class EmployeePayrolls {
 		}
 		scanner.close();
 	}
+
 }

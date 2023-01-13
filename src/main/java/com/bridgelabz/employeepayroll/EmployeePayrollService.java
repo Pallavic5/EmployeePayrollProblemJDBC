@@ -1,6 +1,7 @@
 package com.bridgelabz.employeepayroll;
-/*
- * UC 3 - Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
+/*Problem Statement
+ * UC 4 - Ability to update the salary i.e. the base pay for Employee Terisa to 3000000.00 and sync it with Database
+using JDBC PreparedStatement 
  */
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class EmployeePayrollService {
 	public ArrayList<Employee> employeeList;
@@ -47,16 +49,17 @@ public class EmployeePayrollService {
 		}
 		return employeeList;
 	}
-	
+
 	/**
-     * this method is used to print records from the payroll_service table
-     */
+	 * this method is used to print records from the payroll_service table
+	 */
 	public void display() {
 		for (Employee i : employeeList) {
 			System.out.println(i.toString());
 		}
 	}
-	//Update query
+
+	// Update query
 	public double updateBasicPay(String Name, double basicPay) {
 		String UPDATE = "UPDATE employee_payroll SET BasicPay = ? WHERE Name = ?";
 		try {
@@ -77,7 +80,7 @@ public class EmployeePayrollService {
 		}
 		return 0.0;
 	}
-	
+
 	public void getEmployee(LocalDate start, LocalDate end) {
 		ArrayList<Employee> empSelected = new ArrayList<Employee>();
 		String select = "SELECT * FROM employee_payroll WHERE EmpStart BETWEEN ? AND ?";
@@ -114,5 +117,69 @@ public class EmployeePayrollService {
 		}
 	}
 
+	/*
+	 * This method is used to find sum, average, min, max from the payroll_service
+	 * table
+	 */
 
+	public void calculate() {
+		Scanner scanner = new Scanner(System.in);
+
+		final int EXIT = 6;
+		int choice = 0;
+		while (choice != EXIT) {
+			System.out.println("enter your choice\n1. SUM\n2. AVERAGE\n3. MIN\n4. MAX  \n5.COUNT\n6.EXIT\n");
+			choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				calculateQuery("SELECT Gender, SUM(BasicPay) FROM employee_payroll GROUP BY Gender");
+				break;
+
+			case 2:
+				calculateQuery("SELECT Gender, AVG(BasicPay) FROM employee_payroll GROUP BY Gender");
+				break;
+
+			case 3:
+				calculateQuery("SELECT Gender, MIN(BasicPay) FROM employee_payroll GROUP BY Gender");
+				break;
+			case 4:
+				calculateQuery("SELECT Gender, MAX(BasicPay) FROM employee_payroll GROUP BY Gender");
+				break;
+			case 5:
+				calculateQuery("SELECT Gender, COUNT(BasicPay) FROM employee_payroll GROUP BY Gender");
+				break;
+			}
+		}
+	}
+	/*
+	 * this method is used to print the basic pay by using the gender
+	 * 
+	 */
+
+	public void calculateQuery(String calculate) {
+		List<Employee> result = new ArrayList<Employee>();
+
+		try {
+			preparedStatement = connection.prepareStatement(calculate);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Employee employee = new Employee();
+				employee.setGender(resultSet.getString(1));
+				employee.setBasicPay(resultSet.getDouble(2));
+
+				result.add(employee);
+			}
+			if (calculate.contains("COUNT")) {
+				for (Employee i : result) {
+					System.out.println("Gender: " + i.getGender() + " COUNT: " + i.getBasicPay());
+				}
+			} else {
+				for (Employee i : result) {
+					System.out.println("Gender: " + i.getGender() + " Basic pay: " + i.getBasicPay());
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
